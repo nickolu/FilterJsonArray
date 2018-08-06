@@ -1,0 +1,30 @@
+{
+  "name": "jsonfilterapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/.bin/jest",
+    "babel": "babel --presets es2015 js/main.js -o build/main.bundle.js",
+    "start": "http-server",
+    "webpack": "node_modules/.bin/webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-loader": "~7.1.5",
+    "jest": "~23.4.2",
+    "webpack": "~4.16.4",
+    "webpack-cli": "~3.1.0"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!**/node_modules/**",
+      "!**/dist/**",
+      "!**/coverage/**",
+      "!webpack.config.js"
+    ],
+    "testURL" : "http://localhost/"
+  }
+}
