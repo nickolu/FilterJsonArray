@@ -46,6 +46,39 @@ class FilterBuilder  {
     return this;
   }
 
+  range(fieldName, startValue, endValue) {
+    this.filteredData = this.filteredData.filter((item)=>{
+      const intValue = Number(item[fieldName]);
+      if (intValue >= startValue && intValue <= endValue) {
+        return true;
+      }
+    });
+    
+    return this;
+  }
+
+  minimum(fieldName, val) {
+    this.filteredData = this.filteredData.filter((item)=>{
+      const itemValue = Number(item[fieldName]);
+      if (val <= itemValue) {
+        return true;
+      }
+    });
+    
+    return this;
+  }
+
+  maximum(fieldName, val) {
+    this.filteredData = this.filteredData.filter((item)=>{
+      const itemValue = Number(item[fieldName]);
+      if (val >= itemValue) {
+        return true;
+      }
+    });
+    
+    return this;
+  }
+
   build() {
     return new Filter(this);
   }
