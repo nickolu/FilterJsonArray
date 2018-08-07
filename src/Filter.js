@@ -1,17 +1,27 @@
 const utils = require('./utilities.js');
 
-class Filter {
+
+class FilterBuilder {
   constructor(builder) {
     return builder.filteredData;
   }
 }
 
-class FilterBuilder  {
+class Filter  {
   constructor(arr) {
-    this.data = arr;
-    this.filteredData = arr;
+    if (Array.isArray(arr)) {
+      this.data = arr;
+      this.filteredData = arr;  
+    } else {
+      this.filteredData = [];
+    }
   }
 
+  /**
+   * only objects where the first character of a field matches the criteria
+   * @param {string} fieldName 
+   * @param {string} criteria 
+   */
   firstCharacter(fieldName, criteria) {
     this.filteredData = this.filteredData.filter((item)=>{
       if (item[fieldName].split("")[0] === criteria) {
@@ -22,6 +32,11 @@ class FilterBuilder  {
     return this;
   }
 
+  /**
+   * only objects which have a specific substring in a given field
+   * @param {string} fieldName 
+   * @param {string} criteria 
+   */
   stringMatch(fieldName, criteria) {
     this.filteredData = this.filteredData.filter((item)=>{
       
@@ -36,6 +51,10 @@ class FilterBuilder  {
     return this;
   }
 
+  /**
+   * only objects which have a specific substring anywhere in a stringified version of the object
+   * @param {string} criteria 
+   */
   stringMatchAny(criteria) {
     this.filteredData = this.filteredData.filter((item)=>{
       const jsonString = utils.sanitizeText(JSON.stringify(item));
@@ -46,6 +65,12 @@ class FilterBuilder  {
     return this;
   }
 
+  /**
+   * only objects where the given field is a number and its value is between two given numbers
+   * @param {string} fieldName 
+   * @param {number} startValue 
+   * @param {number} endValue 
+   */
   range(fieldName, startValue, endValue) {
     this.filteredData = this.filteredData.filter((item)=>{
       const intValue = Number(item[fieldName]);
@@ -57,10 +82,15 @@ class FilterBuilder  {
     return this;
   }
 
-  minimum(fieldName, val) {
+  /**
+   * only objects where the given field is a number and its value is greater than or equal to a given point
+   * @param {string} fieldName 
+   * @param {number} criteria 
+   */
+  minimum(fieldName, criteria) {
     this.filteredData = this.filteredData.filter((item)=>{
       const itemValue = Number(item[fieldName]);
-      if (val <= itemValue) {
+      if (criteria <= itemValue) {
         return true;
       }
     });
@@ -68,10 +98,15 @@ class FilterBuilder  {
     return this;
   }
 
-  maximum(fieldName, val) {
+  /**
+   * only objects where the given field is a number and its value is less than or equal to a given point
+   * @param {string} fieldName 
+   * @param {number} criteria 
+   */
+  maximum(fieldName, criteria) {
     this.filteredData = this.filteredData.filter((item)=>{
       const itemValue = Number(item[fieldName]);
-      if (val >= itemValue) {
+      if (criteria >= itemValue) {
         return true;
       }
     });
@@ -80,9 +115,8 @@ class FilterBuilder  {
   }
 
   build() {
-    return new Filter(this);
+    return new FilterBuilder(this);
   }
 }
 
-
-module.exports = FilterBuilder;
+module.exports = Filter;

@@ -1,13 +1,20 @@
-const FilterBuilder = require('../Filter.js');
+const Filter = require('../Filter.js');
 const sampleData = require('./sampleData.js');
+
+describe('Filter',()=>{
+  it('should return an empty array if the data argument is not an array',()=>{
+    expect(new Filter(sampleData).filter()).toEqual([]);
+  });
+  
+});
 
 describe('firstCharacter',()=>{
   it('should filter the objects by the first character of the given fieldName',()=>{
     const jsonArray = sampleData.simpleDataArrays["short"];
-    const filter = new FilterBuilder(jsonArray);
+    const filter = new Filter(jsonArray);
     const filteredData = filter
       .firstCharacter('b','f')
-      .build();
+      .filter();
     
     expect(filteredData).toEqual([
       jsonArray[0],
@@ -19,20 +26,20 @@ describe('firstCharacter',()=>{
 describe('stringMatch',()=>{
   it('should return an array with three objects when filtering the spells by "duration" === "instantaneous"',()=>{
     const jsonArray = sampleData.spellsArray;
-    const filter = new FilterBuilder(jsonArray);
+    const filter = new Filter(jsonArray);
     const filteredData = filter
       .stringMatch('duration','instantaneous')
-      .build();
+      .filter();
       
     expect(filteredData.length).toEqual(3);
   });
 
   it('should return none of the provided data when given a bad fieldName', ()=>{
     const jsonArray = sampleData.simpleDataArrays["long"];
-    const filter = new FilterBuilder(jsonArray);
+    const filter = new Filter(jsonArray);
     const filteredData = filter
       .stringMatch('duration','instantaneous')
-      .build();
+      .filter();
       
     expect(filteredData.length).toEqual(0);
   });
@@ -41,22 +48,22 @@ describe('stringMatch',()=>{
 describe('stringMatchAny',()=>{
   it('should return an array with three objects when filtering the spells by "instantaneous"',()=>{
     const jsonArray = sampleData.spellsArray;
-    const filter = new FilterBuilder(jsonArray);
+    const filter = new Filter(jsonArray);
     const filteredData = filter
       .stringMatchAny('instantaneous')
-      .build();
+      .filter();
     
     expect(filteredData.length).toEqual(3);
   })
 });
 
 describe('range',()=>{
-  it('should filter',()=>{
+  it('should return objects where the field "a" has a value between 2 and 5',()=>{
     const jsonArray = sampleData.simpleDataArrays["numbers"];
-    const filter = new FilterBuilder(jsonArray);
+    const filter = new Filter(jsonArray);
     const filteredData = filter
       .range('a',2,5)
-      .build();
+      .filter();
     
     expect(filteredData).toEqual([
       {
@@ -84,12 +91,12 @@ describe('range',()=>{
 });
 
 describe('minimum',()=>{
-  it('should filter',()=>{
+  it('should return objects where the field "b" has a value of 8 or greater',()=>{
     const jsonArray = sampleData.simpleDataArrays["numbers"];
-    const filter = new FilterBuilder(jsonArray);
+    const filter = new Filter(jsonArray);
     const filteredData = filter
       .minimum('b',8)
-      .build();
+      .filter();
     
     expect(filteredData).toEqual([
       {
@@ -122,12 +129,12 @@ describe('minimum',()=>{
 });
 
 describe('maximum',()=>{
-  it('should filter',()=>{
+  it('should return objects where the field "c" has a value of 15 or less',()=>{
     const jsonArray = sampleData.simpleDataArrays["numbers"];
-    const filter = new FilterBuilder(jsonArray);
+    const filter = new Filter(jsonArray);
     const filteredData = filter
       .maximum('c',15)
-      .build();
+      .filter();
     
     expect(filteredData).toEqual([
       {
@@ -149,18 +156,27 @@ describe('maximum',()=>{
   })
 });
 
+describe('chaining filters', ()=>{
+  it('should return the json array with all other items removed', ()=>{
+    const sorcererSpells = new Filter(sampleData["spellsArray"])
+      .stringMatchAny('sorcerer')
+      .stringMatch('school','necromancy')
+      .filter();
+
+    expect(sorcererSpells).toEqual([sampleData["spellsArray"][0]]);
+  });
+});
 
 // describe('',()=>{
 //   it('should filter',()=>{
 //     const jsonArray = sampleData;
-//     const filter = new FilterBuilder(jsonArray);
+//     const filter = new Filter(jsonArray);
 //     const filteredData = filter
 //       .firstCharacter('b','f')
-//       .build();
+//       .filter();
     
 //     expect(filteredData).toEqual([
       
 //     ]);
 //   })
 // });
-
