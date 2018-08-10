@@ -18,9 +18,7 @@ class Filter  {
   }
 
   /**
-   * only objects where the first character of a field matches the criteria
-   * @param {string} fieldName 
-   * @param {string} criteria 
+   * filter by objects which have a specific first character in a certain field
    */
   firstCharacter(fieldName, criteria) {
     this.filteredData = this.filteredData.filter((item)=>{
@@ -33,9 +31,7 @@ class Filter  {
   }
 
   /**
-   * only objects which have a specific substring in a given field
-   * @param {string} fieldName 
-   * @param {string} criteria 
+   * filter by objects which have a certain substring in a certain field
    */
   stringMatch(fieldName, criteria) {
     this.filteredData = this.filteredData.filter((item)=>{
@@ -50,10 +46,9 @@ class Filter  {
     
     return this;
   }
-
-  /**
-   * only objects which have a specific substring anywhere in a stringified version of the object
-   * @param {string} criteria 
+  
+   /**
+   * filter by objects which have a specific substring anywhere in a stringified version of the object
    */
   stringMatchAny(criteria) {
     this.filteredData = this.filteredData.filter((item)=>{
@@ -65,11 +60,9 @@ class Filter  {
     return this;
   }
 
+
   /**
-   * only objects where the given field is a number and its value is between two given numbers
-   * @param {string} fieldName 
-   * @param {number} startValue 
-   * @param {number} endValue 
+   * filter by objects which have a number within a specified range in a certain field
    */
   range(fieldName, startValue, endValue) {
     this.filteredData = this.filteredData.filter((item)=>{
@@ -83,9 +76,7 @@ class Filter  {
   }
 
   /**
-   * only objects where the given field is a number and its value is greater than or equal to a given point
-   * @param {string} fieldName 
-   * @param {number} criteria 
+   * filter by objects which have a number greater than or equal to the critia in a certain field
    */
   minimum(fieldName, criteria) {
     this.filteredData = this.filteredData.filter((item)=>{
@@ -99,9 +90,7 @@ class Filter  {
   }
 
   /**
-   * only objects where the given field is a number and its value is less than or equal to a given point
-   * @param {string} fieldName 
-   * @param {number} criteria 
+   * filter by objects which have a number less than or equal to the critia in a certain field
    */
   maximum(fieldName, criteria) {
     this.filteredData = this.filteredData.filter((item)=>{
