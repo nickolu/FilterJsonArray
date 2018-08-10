@@ -1,9 +1,9 @@
-const Filter = require('../Filter.js');
+const FilterJsonArray = require('../FilterJsonArray.js');
 const sampleData = require('./sampleData.js');
 
-describe('Filter',()=>{
+describe('FilterJsonArray',()=>{
   it('should return an empty array if the data argument is not an array',()=>{
-    expect(new Filter(sampleData).filter()).toEqual([]);
+    expect(new FilterJsonArray(sampleData).filter()).toEqual([]);
   });
   
 });
@@ -11,7 +11,7 @@ describe('Filter',()=>{
 describe('firstCharacter',()=>{
   it('should filter the objects by the first character of the given fieldName',()=>{
     const jsonArray = sampleData.simpleDataArrays["short"];
-    const filter = new Filter(jsonArray);
+    const filter = new FilterJsonArray(jsonArray);
     const filteredData = filter
       .firstCharacter('b','f')
       .filter();
@@ -26,7 +26,7 @@ describe('firstCharacter',()=>{
 describe('stringMatch',()=>{
   it('should return an array with three objects when filtering the spells by "duration" === "instantaneous"',()=>{
     const jsonArray = sampleData.spellsArray;
-    const filter = new Filter(jsonArray);
+    const filter = new FilterJsonArray(jsonArray);
     const filteredData = filter
       .stringMatch('duration','instantaneous')
       .filter();
@@ -36,7 +36,7 @@ describe('stringMatch',()=>{
 
   it('should return none of the provided data when given a bad fieldName', ()=>{
     const jsonArray = sampleData.simpleDataArrays["long"];
-    const filter = new Filter(jsonArray);
+    const filter = new FilterJsonArray(jsonArray);
     const filteredData = filter
       .stringMatch('duration','instantaneous')
       .filter();
@@ -48,7 +48,7 @@ describe('stringMatch',()=>{
 describe('stringMatchAny',()=>{
   it('should return an array with three objects when filtering the spells by "instantaneous"',()=>{
     const jsonArray = sampleData.spellsArray;
-    const filter = new Filter(jsonArray);
+    const filter = new FilterJsonArray(jsonArray);
     const filteredData = filter
       .stringMatchAny('instantaneous')
       .filter();
@@ -60,7 +60,7 @@ describe('stringMatchAny',()=>{
 describe('range',()=>{
   it('should return objects where the field "a" has a value between 2 and 5',()=>{
     const jsonArray = sampleData.simpleDataArrays["numbers"];
-    const filter = new Filter(jsonArray);
+    const filter = new FilterJsonArray(jsonArray);
     const filteredData = filter
       .range('a',2,5)
       .filter();
@@ -93,7 +93,7 @@ describe('range',()=>{
 describe('minimum',()=>{
   it('should return objects where the field "b" has a value of 8 or greater',()=>{
     const jsonArray = sampleData.simpleDataArrays["numbers"];
-    const filter = new Filter(jsonArray);
+    const filter = new FilterJsonArray(jsonArray);
     const filteredData = filter
       .minimum('b',8)
       .filter();
@@ -131,7 +131,7 @@ describe('minimum',()=>{
 describe('maximum',()=>{
   it('should return objects where the field "c" has a value of 15 or less',()=>{
     const jsonArray = sampleData.simpleDataArrays["numbers"];
-    const filter = new Filter(jsonArray);
+    const filter = new FilterJsonArray(jsonArray);
     const filteredData = filter
       .maximum('c',15)
       .filter();
@@ -158,7 +158,7 @@ describe('maximum',()=>{
 
 describe('chaining filters', ()=>{
   it('should return the json array with all other items removed', ()=>{
-    const sorcererSpells = new Filter(sampleData["spellsArray"])
+    const sorcererSpells = new FilterJsonArray(sampleData["spellsArray"])
       .stringMatchAny('sorcerer')
       .stringMatch('school','necromancy')
       .filter();
@@ -166,17 +166,3 @@ describe('chaining filters', ()=>{
     expect(sorcererSpells).toEqual([sampleData["spellsArray"][0]]);
   });
 });
-
-// describe('',()=>{
-//   it('should filter',()=>{
-//     const jsonArray = sampleData;
-//     const filter = new Filter(jsonArray);
-//     const filteredData = filter
-//       .firstCharacter('b','f')
-//       .filter();
-    
-//     expect(filteredData).toEqual([
-      
-//     ]);
-//   })
-// });
