@@ -1,6 +1,7 @@
 const utils = require('./utilities.js');
 
 
+
 class FilterBuilder {
   constructor(builder) {
     return builder.filteredData;
@@ -8,20 +9,24 @@ class FilterBuilder {
 }
 
 class FilterJsonArray  {
-  constructor(arr) {
-    if (Array.isArray(arr)) {
-      this.data = arr;
-      this.filteredData = arr;  
-    } else {
-      this.filteredData = [];
-    }
+  constructor(initialJsonArray) {
+    this.filteredData = Array.isArray(initialJsonArray) 
+      ? initialJsonArray 
+      : [];
+  }
+
+  /**
+   * filter the current jsonArray with provided filter function
+   */
+  filterData(filterFunction) {
+    this.filteredData = this.filteredData.filter(filterFunction);
   }
 
   /**
    * filter by objects which have a specific first character in a certain field
    */
   firstCharacter(fieldName, criteria) {
-    this.filteredData = this.filteredData.filter((item)=>{
+    this.filterData((item)=>{
       if (item[fieldName].split("")[0] === criteria) {
         return true;
       }
@@ -34,8 +39,7 @@ class FilterJsonArray  {
    * filter by objects which have a certain substring in a certain field
    */
   stringMatch(fieldName, criteria) {
-    this.filteredData = this.filteredData.filter((item)=>{
-      
+    this.filterData((item)=>{
       if (typeof item[fieldName] === "string") {
         const text = utils.sanitizeText(item[fieldName]);
         criteria = utils.sanitizeText(criteria);
@@ -51,7 +55,7 @@ class FilterJsonArray  {
    * filter by objects which have a specific substring anywhere in a stringified version of the object
    */
   stringMatchAny(criteria) {
-    this.filteredData = this.filteredData.filter((item)=>{
+    this.filterData((item)=>{
       const jsonString = utils.sanitizeText(JSON.stringify(item));
       
       return jsonString.includes(criteria);
@@ -65,7 +69,7 @@ class FilterJsonArray  {
    * filter by objects which have a number within a specified range in a certain field
    */
   range(fieldName, startValue, endValue) {
-    this.filteredData = this.filteredData.filter((item)=>{
+    this.filterData((item)=>{
       const intValue = Number(item[fieldName]);
       if (intValue >= startValue && intValue <= endValue) {
         return true;
@@ -79,7 +83,7 @@ class FilterJsonArray  {
    * filter by objects which have a number greater than or equal to the critia in a certain field
    */
   minimum(fieldName, criteria) {
-    this.filteredData = this.filteredData.filter((item)=>{
+    this.filterData((item)=>{
       const itemValue = Number(item[fieldName]);
       if (criteria <= itemValue) {
         return true;
@@ -93,7 +97,7 @@ class FilterJsonArray  {
    * filter by objects which have a number less than or equal to the critia in a certain field
    */
   maximum(fieldName, criteria) {
-    this.filteredData = this.filteredData.filter((item)=>{
+    this.filterData((item)=>{
       const itemValue = Number(item[fieldName]);
       if (criteria >= itemValue) {
         return true;
