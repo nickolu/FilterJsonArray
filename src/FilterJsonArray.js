@@ -7,7 +7,7 @@ class FilterBuilder {
   }
 }
 
-class Filter  {
+class FilterJsonArray  {
   constructor(arr) {
     if (Array.isArray(arr)) {
       this.data = arr;
@@ -103,9 +103,9 @@ class Filter  {
     return this;
   }
 
-  build() {
+  filter() {
     return new FilterBuilder(this);
   }
 }
 
-module.exports = Filter;
+module.exports = FilterJsonArray;
